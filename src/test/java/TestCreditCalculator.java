@@ -8,11 +8,13 @@ public class TestCreditCalculator {
     private final int PERCENT = 12;
     private final int PERIOD = 12;
 
+    private CreditCalculator creditCalculator;
     private double monthlyPayment;
 
     @BeforeEach
     public void init() {
         System.out.println("Тесты запущенны");
+        creditCalculator = new CreditCalculator(LOAN_AMOUNT, PERCENT, PERIOD);
     }
 
     @BeforeAll
@@ -32,11 +34,10 @@ public class TestCreditCalculator {
 
     @Test
     public void testMonthlyPayment() {
-        CreditCalculator creditCalculator = new CreditCalculator();
 
         double rateOneMonth = PERCENT * 0.01 / 12;
-        monthlyPayment = (double) LOAN_AMOUNT * (rateOneMonth + (rateOneMonth / (1 + rateOneMonth) * PERIOD - 1));
-        double expected = monthlyPayment;
+        monthlyPayment = (double) LOAN_AMOUNT * (rateOneMonth + (rateOneMonth / (1 + rateOneMonth) * PERIOD));
+        double expected = Math.ceil(monthlyPayment);
 
         double result = creditCalculator.monthlyPayment();
 
@@ -45,7 +46,6 @@ public class TestCreditCalculator {
 
     @Test
     public void testTotalAmountPayments() {
-        CreditCalculator creditCalculator = new CreditCalculator();
 
         double expected = monthlyPayment * PERIOD;
 
@@ -56,7 +56,6 @@ public class TestCreditCalculator {
 
     @Test
     public void testOverpayment() {
-        CreditCalculator creditCalculator = new CreditCalculator();
 
         double expected = monthlyPayment * PERIOD - LOAN_AMOUNT;
 
